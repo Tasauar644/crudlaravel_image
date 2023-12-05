@@ -36,14 +36,13 @@
                 <td>{{$post->title}}</td>
                 <td>{{$post->details}}</td> 
                 <td>{{$post->user->name}}</td>
-                <td><image src="{{asset('/storage/images/'.$post->image)}}"height="50px"/></td>
-
+                <td><image src="{{asset(Storage::url($post->image))}}" height="50px"/></td>
                 <td>
               <a href="{{route('post.delete',['id'=>$post->id])}}"><button type="button" class="btn btn-danger">Delete</button></a>
-              <a href=""><button type="button" class="btn btn-primary">Edit</button></a>
+              <a href="{{route('post.edit',['id'=>$post->id])}}"><button type="button" class="btn btn-primary">Edit</button></a>
             </td>
             </tr>
-            @endforeach
+            @endforeach 
         </tbody>
     </table>
 

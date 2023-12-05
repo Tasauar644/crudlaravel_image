@@ -51,12 +51,54 @@ class PostController extends Controller
     }
       public function delete($id){
         $post= Post::find($id);
-        if(!is_null($post)){
+
+        $image_path=public_path('images/'.$post->image);
+        if(file_exists($image_path)){
+            unlink($image_path);
+            $post->delete();
+            return redirect('getuserpost');
+        }
+        else{
+          
           $post->delete();
-          return redirect('getuserpost');
+         return redirect('getuserpost');
       
         }
     }
+    public function edit($id){
+        $url=('/post/update').'/'.$id;
+        $post= Post::find($id);
+        return view("Posts/edit-post", compact("post","url"));
+    }
+
+    public function update(Request $request,$id){
+        $post= Post::find($id);
+        if($request->hasFile("image")){
+            $destination_path='public/images';
+            $image=$request->file('image');
+            $image_name=$image->getClientOriginalName();
+            $path=$request->file('image')->storeAs($destination_path,$image_name);
+            $post->title = $request->title;
+            $post->details = $request->details;
+            $post->image = $image_name;
+            $post->save();
+
+            return redirect('getuserpost');
+        }
+            else{
+               
+                $post->title = $request->title;
+                $post->details = $request->details;
+                $post->save();
+                return redirect('getuserpost');
+
+            }
+     
+    
+  
+   
+  
+      }
 
 
 }

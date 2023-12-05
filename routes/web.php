@@ -29,3 +29,5 @@ Route::post('/user/update/{id}',[UserController::class,'update'])->name('user.up
 Route::get('/post/create',[PostController::class,'insert'])->name('post.create');
 Route::post('/post/create',[PostController::class,'store']);
 Route::get('/post/delete/{id}',[PostController::class,'delete'])->name('post.delete');
+Route::get('/post/edit/{id}',[PostController::class,'edit'])->name('post.edit');
+Route::post('/post/update/{id}',[PostController::class,'update'])->name('post.update');
