@@ -8,7 +8,7 @@
 </head>
 <body>
   
-<form action="{{$url}}" method="post">
+<form action="{{$url}}" method="post" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
       <label for="exampleFormControlInput1">Title</label>

@@ -26,15 +26,11 @@ class PostController extends Controller
 
         if($request->hasFile("image")){
            
-
-            $destination_path='public/images';
-            $image=$request->file('image');
-            $image_name=$image->getClientOriginalName();
-            $path=$request->file('image')->storeAs($destination_path,$image_name);
+           
             $post->title = $request->title;
             $post->user_id = $request->user_id;
             $post->details = $request->details;
-            $post->image = $image_name;
+            $post->image =  imageHandling($request->file("image"));
             $post->save();
             return view('welcome');
         }
@@ -51,19 +47,9 @@ class PostController extends Controller
     }
       public function delete($id){
         $post= Post::find($id);
-
-        $image_path=public_path('images/'.$post->image);
-        if(file_exists($image_path)){
-            unlink($image_path);
-            $post->delete();
-            return redirect('getuserpost');
-        }
-        else{
-          
-          $post->delete();
-         return redirect('getuserpost');
-      
-        }
+        $post->delete();
+        return redirect('getuserpost');
+ 
     }
     public function edit($id){
         $url=('/post/update').'/'.$id;
@@ -73,23 +59,21 @@ class PostController extends Controller
 
     public function update(Request $request,$id){
         $post= Post::find($id);
-        if($request->hasFile("image")){
-            $destination_path='public/images';
-            $image=$request->file('image');
-            $image_name=$image->getClientOriginalName();
-            $path=$request->file('image')->storeAs($destination_path,$image_name);
+     
+        if ($request->hasFile("image")) {
+            $image = $request->file('image');
+            $imageName = UpdateImage($image,$post->image);
             $post->title = $request->title;
             $post->details = $request->details;
-            $post->image = $image_name;
-            $post->save();
+            $post->image = $imageName;
 
+            $post->update();
             return redirect('getuserpost');
         }
             else{
-               
-                $post->title = $request->title;
+                 $post->title = $request->title;
                 $post->details = $request->details;
-                $post->save();
+                $post->update();
                 return redirect('getuserpost');
 
             }
